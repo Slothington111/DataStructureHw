@@ -1,0 +1,74 @@
+CISC 3130 - Homework 4
+Build a Music Player
+Approach: REUSE
+
+Part A: Big-O Analysis
+Method: addSong()
+Structures: LinkedList, HashMap
+Big-O: O(1) average
+Reason: HashMap lookup and insertion are O(1) on average,
+and adding a song to the end of LinkedList is O(1).
+
+Method: findSong()
+Structures: HashMap (library)
+Big-O: O(1) average
+Reason: HashMap.get() finds a song directly by its ID
+without scanning the playlist.
+
+Method: play()
+Structures: HashMap (library and play counts), ArrayDeque (history)
+Big-O: O(1) average
+Reason: HashMap lookup and play-count updates are O(1) on average,
+and pushing the previous song onto history is O(1) amortized.
+
+Method: queueLater()
+Structures: HashMap (library), ArrayDeque (Up Next)
+Big-O: O(1) average/amortized
+Reason: HashMap.get() finds the song in O(1) average time,
+and ArrayDeque.addLast() adds it in O(1) amortized time.
+
+Method: queueNext()
+Structures: HashMap (library), ArrayDeque (Up Next)
+Big-O: O(1) average/amortized
+Reason: HashMap.get() finds the song in O(1) average time,
+and ArrayDeque.addFirst() adds it in O(1) amortized time.
+
+Method: next()
+Structures: ArrayDeque (Up Next and history), LinkedList (playlist),
+HashMaps (library and play counts)
+Big-O: O(n) worst case
+Reason: The method may scan the LinkedList using indexOf() and
+get(), or skip several removed songs in the Up Next queue.
+
+Method: back()
+Structures: ArrayDeque (history and Up Next),
+HashMaps (library and play counts)
+Big-O: O(n) worst case
+Reason: The method may loop through the history stack
+to skip removed songs before finding a valid song.
+
+Method: removeSong()
+Structures: HashMaps (library and play counts), LinkedList (playlist)
+Big-O: O(n) worst case
+Reason: HashMap removals are O(1) on average, but
+LinkedList.removeIf() scans the playlist in O(n) time.
+
+Method: showPlaylist()
+Structures: LinkedList (playlist and titles)
+Big-O: O(n)
+Reason: The method loops through every song in the playlist
+and adds each title to a new LinkedList.
+
+
+Part B: Data Structure Justifications
+
+1. LinkedList — Playlist
+
+I used Java's built-in LinkedList to store songs in the order they were added. A LinkedList makes it easy to append songs without shifting other elements, unlike a plain array where inserting or removing an element may require shifting elements. However, finding a song's position using indexOf() and accessing it using get() can take O(n) time. Using Java's built-in LinkedList saves me from writing my own nodes and managing their connections, although a custom linked list with direct node references could make certain operations faster.
+
+2. ArrayDeque — Up Next Queue and History Stack
+
+I used Java's built-in ArrayDeque to manage both the Up Next queue and the song history. ArrayDeque allows me to add and remove songs from either end efficiently, usually in O(1) amortized time. With a plain array, adding or removing a song at the front could take O(n) time because the remaining elements might need to shift. Using the built-in ArrayDeque also saves me from manually creating and maintaining my own linked nodes, while still providing efficient stack and queue operations.
+
+
+
